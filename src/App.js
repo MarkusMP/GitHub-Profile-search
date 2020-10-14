@@ -1,25 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
+import './App.css'
+import { Header, Search, Profile, Repos } from './components'
 
 function App() {
+  const [query, setQuery] = useState('')
+  const [profileData, setProfileData] = useState([])
+  const [reposData, setReposData] = useState([])
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const { data } = await axios.get(`https://api.github.com/users/Markusppp`)
+        const repos = await axios.get(`https://api.github.com/users/Markusppp/repos?per_page20`)
+        setProfileData(data)
+        setReposData(repos.data)
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+    fetchApi()
+  }, [])
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      if (query !== '') {
+        try {
+          const { data } = await axios.get(`https://api.github.com/users/${query}`)
+          const repos = await axios.get(`https://api.github.com/users/${query}/repos?per_page20`)
+          setProfileData(data)
+          setReposData(repos.data)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+    fetchApi()
+  }, [query])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Search inputQ={setQuery} />
+      <Profile data={profileData} />
+      <Repos data={reposData} />
+
+    </>
   );
 }
 
