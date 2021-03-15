@@ -11,8 +11,8 @@ function App() {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const { data } = await axios.get(`https://api.github.com/users/Markusppp`)
-        const repos = await axios.get(`https://api.github.com/users/Markusppp/repos?per_page20`)
+        const { data } = await axios.get(`https://api.github.com/users/markusmp`)
+        const repos = await axios.get(`https://api.github.com/users/markusmp/repos?per_page20`)
         setProfileData(data)
         setReposData(repos.data)
       } catch (error) {
